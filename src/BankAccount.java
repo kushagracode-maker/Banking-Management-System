@@ -6,32 +6,32 @@ public class BankAccount{
     private String name;
     private double balance;
 
-    private ArrayList<String> transactions;
+    private ArrayList<Transaction>transactions;
 
     public BankAccount(String accountNumber, String name, double balance){
+        this.accountNumber = accountNumber;
+        this.name = name;
+        this.balance = balance;
 
-        this.accountNumber =accountNumber;
-        this.name =name;
-        this.balance =balance;
         transactions = new ArrayList<>();
-        transactions.add("Account created with Rs. " + balance);
+        transactions.add(
+                new Transaction("Account created with Rs. " + balance)
+        );
     }
-
     public void deposit(double amount){
-        if(amount <=0){
+        if(amount <= 0){
             System.out.println("Amount must be greater than 0.");
             return;
         }
-        balance =balance + amount;
-
-        transactions.add("Deposited Rs. " + amount);
-
+        balance = balance + amount;
+        transactions.add(
+                new Transaction("Deposited Rs. " + amount)
+        );
         System.out.println("Money deposited successfully.");
         System.out.printf("New balance: Rs. %.2f%n", balance);
     }
-    public void withdraw(double amount){
-
-        if(amount <=0){
+    public void withdraw(double amount) {
+        if(amount <= 0){
             System.out.println("Amount must be greater than 0.");
             return;
         }
@@ -39,16 +39,15 @@ public class BankAccount{
             System.out.println("Insufficient balance.");
             return;
         }
-        balance =balance - amount;
-
-        transactions.add("Withdrawn Rs. " + amount);
-
+        balance = balance - amount;
+        transactions.add(
+                new Transaction("Withdrawn Rs. " + amount)
+        );
         System.out.println("Money withdrawn successfully.");
         System.out.printf("New balance: Rs. %.2f%n", balance);
     }
     public boolean transfer(BankAccount receiver, double amount){
-
-        if(amount <=0){
+        if(amount <= 0){
             System.out.println("Amount must be greater than 0.");
             return false;
         }
@@ -56,30 +55,41 @@ public class BankAccount{
             System.out.println("Insufficient balance.");
             return false;
         }
-        balance =balance - amount;
-        receiver.balance =receiver.balance + amount;
-
+        balance = balance - amount;
+        receiver.balance = receiver.balance + amount;
         transactions.add(
-                "Transferred Rs. "+ amount +
-                        " to account "+ receiver.accountNumber
+                new Transaction(
+                        "Transferred Rs. " + amount +
+                                " to account " + receiver.accountNumber
+                )
         );
         receiver.transactions.add(
-                "Received Rs. "+ amount +
-                        " from account "+ accountNumber
+                new Transaction(
+                        "Received Rs. " + amount +
+                                " from account " + accountNumber
+                )
         );
-
         System.out.println("Money transferred successfully.");
-        System.out.printf("Your new balance: Rs. %.2f%n", balance);
+        System.out.printf(
+                "Your new balance: Rs. %.2f%n",
+                balance
+        );
         return true;
     }
     public void displayDetails(){
-        System.out.println("\n========== ACCOUNT DETAILS ==========");
-
-        System.out.println("Account Number : " + accountNumber);
-
-        System.out.println("Account Holder : " + name);
-
-        System.out.printf("Balance        : Rs. %.2f%n", balance);
+        System.out.println(
+                "\n========== ACCOUNT DETAILS =========="
+        );
+        System.out.println(
+                "Account Number : " + accountNumber
+        );
+        System.out.println(
+                "Account Holder : " + name
+        );
+        System.out.printf(
+                "Balance      : Rs. %.2f%n",
+                balance
+        );
     }
     public void checkBalance(){
         System.out.printf(
@@ -88,24 +98,23 @@ public class BankAccount{
         );
     }
     public void showTransactions(){
-        System.out.println("\n========== TRANSACTION HISTORY ==========");
-
+        System.out.println(
+                "\n========== TRANSACTION HISTORY =========="
+        );
         if(transactions.isEmpty()){
             System.out.println("No transactions found.");
             return;
         }
-        for(String transaction : transactions){
-            System.out.println("- " + transaction);
+        for(Transaction transaction : transactions){
+            System.out.println("- " + transaction.getDescription());
         }
     }
     public String getAccountNumber(){
         return accountNumber;
     }
-
     public String getName(){
         return name;
     }
-
     public double getBalance(){
         return balance;
     }
